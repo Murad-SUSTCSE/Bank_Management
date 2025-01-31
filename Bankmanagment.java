@@ -186,9 +186,65 @@ public class Bankmanagment {
 
 
     }
+
+    static class LoginFrame extends JFrame{
+        private JTextField AccountNumberField;
+        private JPasswordField pinField;
+
+
+        public LoginFrame(){
+            setTitle("Log In");
+            setSize(800, 800);
+            setLocationRelativeTo(null);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            JPanel panel = new JPanel(new GridLayout(3, 2, 20, 20));
+            panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+
+            int sz = 30;
+
+            JLabel label1 = new JLabel("Account Number : ");
+            label1.setFont(labelsizes(sz));
+            AccountNumberField = new JTextField();
+            AccountNumberField.setFont(labelsizes(sz));
+            panel.add(label1); panel.add(AccountNumberField);
+
+            JLabel label2 = new JLabel("PIN : ");
+            label2.setFont(labelsizes(sz));
+            pinField = new JPasswordField();
+            pinField.setFont(labelsizes(sz));
+            panel.add(label2); panel.add(pinField);
+
+            JButton loginBtn = new JButton("Log in");
+            loginBtn.setFont(labelsizes(sz));
+            JButton backBtn = new JButton("Back");
+            backBtn.setFont(labelsizes(sz));
+
+            backBtn.addActionListener(e -> {
+                this.dispose();
+                HomeScreen.setVisible(true);
+            });
+
+            panel.add(loginBtn); panel.add(backBtn);
+            add(panel);
+        }
+
+        private void login(){
+            try {
+                String accountNumber = AccountNumberField.getText();
+                int pin = Integer.parseInt(new String (pinField.getPassword()));
+                for(User user : Users){
+                    if(user.GetaccountNumber() == accountNumber && user.Getpin() == pin){
+                        // call account show frame
+                        this.dispose();
+                        return;
+                    }
+                }
+                JOptionPane.showMessageDialog(this, "Invalid account number or pin !", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            catch (NumberFormatException ex){
+                JOptionPane.showMessageDialog(this, "Invalid Input format", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+    }
 }
-
-
-
-
-
