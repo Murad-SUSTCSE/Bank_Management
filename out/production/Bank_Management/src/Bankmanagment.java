@@ -1,3 +1,4 @@
+package out.production.Bank_Management.src;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -245,10 +246,10 @@ public class Bankmanagment {
 
 
     static class AccountFrame extends JFrame {
-        private User user;
+        
 
         public AccountFrame(User user) {
-            this.user = user;
+            
             setTitle("Account Information");
             setSize(framesize, framesize);
             setLocationRelativeTo(null);
