@@ -34,5 +34,12 @@ public class User {
     public String GetaccountType(){return accountType;}
     public double GetBalance(){return AccountBalance;}
     public int Getpin(){return pin;}
+    public void addDeposit(double amount){
+        AccountBalance += amount;
+    }
+
+    public void subtractDeposit(double amount){
+        AccountBalance -= amount;
+    }
 
 }
