@@ -1,4 +1,4 @@
-package p;
+package out;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
