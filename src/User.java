@@ -1,6 +1,8 @@
-package Out;
+package p;
 
-public class User {
+import java.io.*;
+
+public class User implements Serializable{
     
     private String name;
     private String email;
@@ -42,6 +44,25 @@ public class User {
 
     public void subtractDeposit(double amount){
         AccountBalance -= amount;
+    }
+
+    public void SaveUser(){
+        File folder = new File("Users");
+        if(!folder.exists())folder.mkdir();
+
+        try(ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream("Users/" + accountNumber + ".dat"))){
+            o.writeObject(this);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static User loadUser(String AccountNumber){
+        try(ObjectInputStream in = new ObjectInputStream(new FileInputStream("Users/" + AccountNumber + ".dat"))) {
+            return (User) in.readObject();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

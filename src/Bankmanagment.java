@@ -1,6 +1,4 @@
-package CHUNU;
-import Out.User;
-
+package p;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -13,12 +11,11 @@ public class Bankmanagment {
     private static ArrayList<User>Users = new ArrayList<>();
     private static JFrame HomeScreen;
     private static int framesize = 600;
-    private static User temp = new User("Murad", "abc", "4578", "123456", "Male", "1", "Savings", 123456, 0.0);
 
 
 
     public static void main(String[] args) {
-        Users.add(temp); creatHomeScreen();
+        creatHomeScreen();
     }
 
     private static Font buttonSizes(int sz){
@@ -94,50 +91,50 @@ public class Bankmanagment {
             if(accountNumber < -1)accountNumber *= -1;
             int labelsz = 25;
 
-            JLabel label1 = new JLabel("Account Number : ");
+            JLabel label1 = new JLabel("Account Number ");
             label1.setFont(labelSizes(labelsz));
             JLabel label12 = new JLabel(Long.toString(accountNumber));
             label12.setFont(labelSizes(labelsz));
             panel.add(label1); panel.add(label12);
 
 
-            JLabel label2 = new JLabel("Name : ");
+            JLabel label2 = new JLabel("Name  ");
             label2.setFont(labelSizes(labelsz));
             NameField = new JTextField();
             NameField.setFont(labelSizes(labelsz));
             panel.add(label2); panel.add(NameField);
 
-            JLabel label3 = new JLabel("Email : ");
+            JLabel label3 = new JLabel("Email  ");
             label3.setFont(labelSizes(labelsz));
             emailField = new JTextField();
             emailField.setFont(labelSizes(labelsz));
             panel.add(label3);  panel.add(emailField);
 
-            JLabel label4 = new JLabel("Phone : ");
+            JLabel label4 = new JLabel("Phone ");
             label4.setFont(labelSizes(labelsz));
             phoneField = new JTextField();
             phoneField.setFont(labelSizes(labelsz));
             panel.add(label4); panel.add(phoneField);
 
-            JLabel label5 = new JLabel("Date of Birth : ");
+            JLabel label5 = new JLabel("Date of Birth  ");
             label5.setFont(labelSizes(labelsz));
             DateOfBirthField = new JTextField();
             DateOfBirthField.setFont(labelSizes(labelsz));
             panel.add(label5); panel.add(DateOfBirthField);
 
-            JLabel label6 = new JLabel("Gender : ");
+            JLabel label6 = new JLabel("Gender  ");
             label6.setFont(labelSizes(labelsz));
             Genderfield = new JComboBox<>(new String[]{"Male", "Female", "Other"});
             Genderfield.setFont(labelSizes(labelsz));
             panel.add(label6); panel.add(Genderfield);
 
-            JLabel label7 = new JLabel("Account Type : ");
+            JLabel label7 = new JLabel("Account Type  ");
             label7.setFont(labelSizes(labelsz));
             accountTypeField = new JComboBox<>(new String[]{"Current", "Savings"});
             accountTypeField.setFont(labelSizes(labelsz));
             panel.add(label7); panel.add(accountTypeField);
 
-            JLabel label8 = new JLabel("6 Digit Pin : ");
+            JLabel label8 = new JLabel("6 Digit Pin  ");
             label8.setFont(labelSizes(labelsz));
             pinField = new JPasswordField();
             pinField.setFont(labelSizes(labelsz));
@@ -172,7 +169,7 @@ public class Bankmanagment {
                                  accountNumber, (String)Genderfield.getSelectedItem(), DateOfBirthField.getText(),
                                 (String)accountTypeField.getSelectedItem(), Integer.parseInt(pin), 0.0);
 
-            Users.add(user);
+            user.SaveUser();
 
             JOptionPane.showMessageDialog(this, "This account is successfully created");
             this.dispose();
@@ -197,14 +194,14 @@ public class Bankmanagment {
 
             int sz = 25;
 
-            JLabel label1 = new JLabel("Account Number : ");
+            JLabel label1 = new JLabel("Account Number");
             label1.setFont(labelSizes(sz));
             label1.setPreferredSize(new Dimension(1, 1));
             AccountNumberField = new JTextField();
             AccountNumberField.setFont(labelSizes(sz));
             panel.add(label1); panel.add(AccountNumberField);
 
-            JLabel label2 = new JLabel("PIN : ");
+            JLabel label2 = new JLabel("PIN          ");
             label2.setFont(labelSizes(sz));
             pinField = new JPasswordField();
             pinField.setFont(labelSizes(sz));
@@ -231,14 +228,15 @@ public class Bankmanagment {
             try {
                 String accountNumber = AccountNumberField.getText();
                 int pin = Integer.parseInt(new String(pinField.getPassword()));
-                for (User user : Users) {
-                    if (Objects.equals(user.GetaccountNumber(), accountNumber) && user.Getpin() == pin) {
-                        AccountFrame accFrame = new AccountFrame(user);
-                        this.dispose();
-                        accFrame.setVisible(true);
-                        return;
-                    }
+                User user = User.loadUser(accountNumber);
+                
+                if (user != null && Objects.equals(user.GetaccountNumber(), accountNumber) && user.Getpin() == pin) {
+                    AccountFrame accFrame = new AccountFrame(user);
+                    this.dispose();
+                    accFrame.setVisible(true);
+                    return;
                 }
+            
                 JOptionPane.showMessageDialog(this, "Invalid account number or pin !", "Error", JOptionPane.ERROR_MESSAGE);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Invalid Input format", "Error", JOptionPane.ERROR_MESSAGE);
@@ -258,33 +256,55 @@ public class Bankmanagment {
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setLayout(new BorderLayout());
 
-            JPanel infopanel = new JPanel(new GridLayout(3, 2, 20, 20));
+            JPanel infopanel = new JPanel(new GridLayout(6, 2, 20, 20));
             infopanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
             int sz = 20;
-            JLabel label1 = new JLabel("Account Number: ");
+            JLabel label1 = new JLabel("Account Number :");
             label1.setFont(labelSizes(sz));
-            JTextArea AccountNumberField = new JTextArea(user.GetaccountNumber());
+            JLabel AccountNumberField = new JLabel(user.GetaccountNumber());
             AccountNumberField.setFont(labelSizes(sz));
-            AccountNumberField.setEditable(false);
             infopanel.add(label1);
             infopanel.add(AccountNumberField);
 
-            JLabel label2 = new JLabel("Name: ");
+            JLabel label2 = new JLabel("Name           :");
             label2.setFont(labelSizes(sz));
-            JTextArea NameField = new JTextArea(user.Getname());
+            JLabel NameField = new JLabel(user.Getname());
             NameField.setFont(labelSizes(sz));
-            NameField.setEditable(false);
             infopanel.add(label2);
             infopanel.add(NameField);
 
-            JLabel label3 = new JLabel("Balance: ");
+            JLabel label3 = new JLabel("Balance        :");
             label3.setFont(labelSizes(sz));
-            JTextArea accountBalance = new JTextArea(Double.toString(user.GetBalance()));
+            JLabel accountBalance = new JLabel(Double.toString(user.GetBalance()));
             accountBalance.setFont(labelSizes(sz));
-            accountBalance.setEditable(false);
             infopanel.add(label3);
             infopanel.add(accountBalance);
+
+            JLabel label4 = new JLabel("Email          :");
+            label4.setFont(labelSizes(sz));
+            JLabel emailField = new JLabel((user.Getemail()));
+            emailField.setFont(labelSizes(sz));
+            infopanel.add(label4);
+            infopanel.add(emailField);
+
+            JLabel label5 = new JLabel("Number         :");
+            label5.setFont(labelSizes(sz));
+            JLabel numberField = new JLabel((user.Getphone()));
+            numberField.setFont(labelSizes(sz));
+            infopanel.add(label5);
+            infopanel.add(numberField);
+
+            JLabel label6 = new JLabel("Date Of Birth  :");
+            label6.setFont(labelSizes(sz));
+            JLabel dateFeild = new JLabel((user.GetDateOfBirth()));
+            dateFeild.setFont(labelSizes(sz));
+            infopanel.add(label6);
+            infopanel.add(dateFeild);
+
+
+
+
 
 
             JPanel buttonpanel = new JPanel(new GridLayout(3, 1, 10, 10));
@@ -412,18 +432,18 @@ public class Bankmanagment {
             pinField.setFont(labelSizes(sz));
             panel.add(label2); panel.add(pinField);
 
-            JButton DepositBtn = new JButton("Deposit");
+            JButton DepositBtn = new JButton("Withdraw");
             DepositBtn.setFont(labelSizes(sz));
             DepositBtn.addActionListener(e -> {
                 try{
                     int pin = Integer.parseInt(new String(pinField.getPassword()));
                     double amount = Double.parseDouble(AmountField.getText());
                     if(checkPin(user, pin)){
-                        if(amount <= user.Getpin()){
-                            JOptionPane.showMessageDialog(this, "Money Deposited Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        if(amount <= user.GetBalance()){
+                            JOptionPane.showMessageDialog(this, "Money Withdrawn Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                             user.subtractDeposit(amount);
                         }else{
-                            JOptionPane.showMessageDialog(this, "You are poor", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(this, "You are poor, LOL", "Error", JOptionPane.ERROR_MESSAGE);
                         }
 
                         BackToInfo(user);
